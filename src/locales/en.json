@@ -1,0 +1,55 @@
+{
+  "app": {
+    "title": "Budsjetto"
+  },
+  "common": {
+    "loading": "Loading...",
+    "income": "Income",
+    "expenses": "Expenses",
+    "balance": "Balance"
+  },
+  "dashboard": {
+    "thisWeek": "This Week",
+    "thisMonth": "This Month"
+  },
+  "entryForm": {
+    "addEntry": "Add Entry",
+    "income": "Income",
+    "expense": "Expense",
+    "amount": "Amount",
+    "category": "Category",
+    "date": "Date",
+    "descriptionOptional": "Description (optional)",
+    "descriptionPlaceholder": "Add a note...",
+    "submit": "Add Entry",
+    "adding": "Adding...",
+    "error": {
+      "invalidAmount": "Please enter a valid positive amount"
+    },
+    "categories": {
+        "Salary": "Salary",
+        "Freelance": "Freelance",
+        "Investment": "Investment",
+        "Gift": "Gift",
+        "Other": "Other",
+        "Food": "Food",
+        "Transport": "Transport",
+        "Housing": "Housing",
+        "Utilities": "Utilities",
+        "Entertainment": "Entertainment",
+        "Shopping": "Shopping",
+        "Health": "Health",
+        "Education": "Education"
+    }
+  },
+  "entryList": {
+    "loading": "Loading entries...",
+    "empty": "No entries yet. Add your first income or expense above!",
+    "recentEntries": "Recent Entries",
+    "confirmDelete": "Are you sure you want to delete this entry?"
+  },
+  "languageSelector": {
+    "en": "English",
+    "no": "Norsk"
+  }
+}

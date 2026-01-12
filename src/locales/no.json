@@ -1,0 +1,55 @@
+{
+  "app": {
+    "title": "Budsjetto"
+  },
+  "common": {
+    "loading": "Laster...",
+    "income": "Inntekter",
+    "expenses": "Utgifter",
+    "balance": "Balanse"
+  },
+  "dashboard": {
+    "thisWeek": "Denne Uken",
+    "thisMonth": "Denne Måneden"
+  },
+  "entryForm": {
+    "addEntry": "Legg til post",
+    "income": "Inntekt",
+    "expense": "Utgift",
+    "amount": "Beløp",
+    "category": "Kategori",
+    "date": "Dato",
+    "descriptionOptional": "Beskrivelse (valgfritt)",
+    "descriptionPlaceholder": "Legg til et notat...",
+    "submit": "Legg til",
+    "adding": "Legger til...",
+    "error": {
+      "invalidAmount": "Vennligst skriv inn et gyldig positivt beløp"
+    },
+    "categories": {
+        "Salary": "Lønn",
+        "Freelance": "Frilans",
+        "Investment": "Investering",
+        "Gift": "Gave",
+        "Other": "Annet",
+        "Food": "Mat",
+        "Transport": "Transport",
+        "Housing": "Bolig",
+        "Utilities": "Strøm/regninger",
+        "Entertainment": "Underholdning",
+        "Shopping": "Shopping",
+        "Health": "Helse",
+        "Education": "Utdanning"
+    }
+  },
+  "entryList": {
+    "loading": "Laster poster...",
+    "empty": "Ingen poster enda. Legg til din første inntekt eller utgift ovenfor!",
+    "recentEntries": "Nylige poster",
+    "confirmDelete": "Er du sikker på at du vil slette denne posten?"
+  },
+  "languageSelector": {
+    "en": "English",
+    "no": "Norsk"
+  }
+}
