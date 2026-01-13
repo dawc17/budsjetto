@@ -96,6 +96,7 @@ textarea,
   padding: 8px 12px;
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
+  color: var(--text-primary);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
@@ -122,6 +123,7 @@ textarea,
   padding: 8px 16px;
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
+  color: var(--text-primary);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
@@ -285,6 +287,14 @@ textarea,
   border-radius: 8px;
   font-size: 0.9375rem;
   transition: border-color 0.2s ease;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.form-row input::placeholder,
+.form-row select::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .form-row input:focus,
@@ -976,6 +986,12 @@ textarea,
   border-radius: 6px;
   font-size: 0.875rem;
   background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.expense-form-row input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
 .expense-form-row input[type="number"] {

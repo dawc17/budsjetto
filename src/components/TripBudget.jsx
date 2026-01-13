@@ -26,6 +26,7 @@ export default function TripBudget({ currency, refreshTrigger }) {
     description: "",
     date: new Date().toISOString().split("T")[0],
   });
+  const [addingExpense, setAddingExpense] = useState(false);
 
   const expenseCategories = [
     "Transport",
@@ -77,7 +78,14 @@ export default function TripBudget({ currency, refreshTrigger }) {
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
+    setAddingExpense(true);
     try {
+      if (!newExpense.amount || parseFloat(newExpense.amount) <= 0) {
+        alert(t("entryForm.error.invalidAmount"));
+        setAddingExpense(false);
+        return;
+      }
+
       await invoke("add_trip_expense", {
         tripId: newExpense.tripId,
         amount: parseFloat(newExpense.amount),
@@ -92,9 +100,12 @@ export default function TripBudget({ currency, refreshTrigger }) {
         description: "",
         date: new Date().toISOString().split("T")[0],
       });
-      fetchTrips();
+      await fetchTrips();
     } catch (error) {
       console.error("Failed to add expense:", error);
+      alert(error);
+    } finally {
+      setAddingExpense(false);
     }
   };
 
@@ -285,6 +296,7 @@ export default function TripBudget({ currency, refreshTrigger }) {
                     {/* Add Expense Form */}
                     <form
                       className="add-expense-form"
+                      noValidate
                       onSubmit={(e) => {
                         e.preventDefault();
                         setNewExpense({ ...newExpense, tripId: trip.id });
@@ -364,8 +376,12 @@ export default function TripBudget({ currency, refreshTrigger }) {
                           }
                           required
                         />
-                        <button type="submit" className="add-expense-btn">
-                          +
+                        <button 
+                          type="submit" 
+                          className="add-expense-btn"
+                          disabled={addingExpense}
+                        >
+                          {addingExpense ? "..." : "+"}
                         </button>
                       </div>
                     </form>
