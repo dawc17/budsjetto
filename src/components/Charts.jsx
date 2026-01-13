@@ -57,10 +57,14 @@ export default function Charts({ currency, refreshTrigger }) {
 
     // Get CSS colors
     const computedStyle = getComputedStyle(document.documentElement);
-    const positiveColor = computedStyle.getPropertyValue("--positive").trim() || "#22c55e";
-    const negativeColor = computedStyle.getPropertyValue("--negative").trim() || "#ef4444";
-    const textColor = computedStyle.getPropertyValue("--text-secondary").trim() || "#64748b";
-    const borderColor = computedStyle.getPropertyValue("--border-color").trim() || "#e2e8f0";
+    const positiveColor =
+      computedStyle.getPropertyValue("--positive").trim() || "#22c55e";
+    const negativeColor =
+      computedStyle.getPropertyValue("--negative").trim() || "#ef4444";
+    const textColor =
+      computedStyle.getPropertyValue("--text-secondary").trim() || "#64748b";
+    const borderColor =
+      computedStyle.getPropertyValue("--border-color").trim() || "#e2e8f0";
 
     // Draw grid lines
     ctx.strokeStyle = borderColor;
@@ -161,9 +165,16 @@ export default function Charts({ currency, refreshTrigger }) {
       <div className="trend-summary">
         {trends.slice(-3).map((trend) => (
           <div key={`${trend.year}-${trend.month}`} className="trend-item">
-            <span className="trend-month">{trend.month_name} {trend.year}</span>
-            <span className={`trend-net ${trend.net >= 0 ? "positive" : "negative"}`}>
-              {trend.net >= 0 ? "+" : ""}{formatCurrency(trend.net)}
+            <span className="trend-month">
+              {trend.month_name} {trend.year}
+            </span>
+            <span
+              className={`trend-net ${
+                trend.net >= 0 ? "positive" : "negative"
+              }`}
+            >
+              {trend.net >= 0 ? "+" : ""}
+              {formatCurrency(trend.net)}
             </span>
           </div>
         ))}

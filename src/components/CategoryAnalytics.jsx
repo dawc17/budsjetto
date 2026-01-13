@@ -53,26 +53,42 @@ export default function CategoryAnalytics({ currency, refreshTrigger }) {
   };
 
   const getBarColor = (index, isIncome) => {
-    const incomeColors = ["#22c55e", "#16a34a", "#15803d", "#166534", "#14532d"];
-    const expenseColors = ["#ef4444", "#dc2626", "#b91c1c", "#991b1b", "#7f1d1d"];
+    const incomeColors = [
+      "#22c55e",
+      "#16a34a",
+      "#15803d",
+      "#166534",
+      "#14532d",
+    ];
+    const expenseColors = [
+      "#ef4444",
+      "#dc2626",
+      "#b91c1c",
+      "#991b1b",
+      "#7f1d1d",
+    ];
     const colors = isIncome ? incomeColors : expenseColors;
     return colors[index % colors.length];
   };
 
   if (loading) {
-    return <div className="category-analytics loading">{t("common.loading")}</div>;
+    return (
+      <div className="category-analytics loading">{t("common.loading")}</div>
+    );
   }
 
   if (!analytics) {
     return null;
   }
 
-  const categories = viewType === "income" 
-    ? analytics.income_by_category 
-    : analytics.expense_by_category;
+  const categories =
+    viewType === "income"
+      ? analytics.income_by_category
+      : analytics.expense_by_category;
 
   const sortedCategories = [...categories].sort((a, b) => b.total - a.total);
-  const total = viewType === "income" ? analytics.total_income : analytics.total_expenses;
+  const total =
+    viewType === "income" ? analytics.total_income : analytics.total_expenses;
 
   return (
     <div className="category-analytics">
@@ -110,7 +126,11 @@ export default function CategoryAnalytics({ currency, refreshTrigger }) {
                   {t(`entryForm.categories.${cat.category}`)}
                 </span>
                 <span className="category-count">
-                  ({cat.count} {cat.count === 1 ? t("analytics.entry") : t("analytics.entries")})
+                  ({cat.count}{" "}
+                  {cat.count === 1
+                    ? t("analytics.entry")
+                    : t("analytics.entries")}
+                  )
                 </span>
               </div>
               <div className="category-stats">
@@ -119,13 +139,20 @@ export default function CategoryAnalytics({ currency, refreshTrigger }) {
                     className="progress-fill"
                     style={{
                       width: `${cat.percentage}%`,
-                      backgroundColor: getBarColor(index, viewType === "income"),
+                      backgroundColor: getBarColor(
+                        index,
+                        viewType === "income"
+                      ),
                     }}
                   ></div>
                 </div>
                 <div className="category-values">
-                  <span className="category-amount">{formatCurrency(cat.total)}</span>
-                  <span className="category-percentage">{cat.percentage.toFixed(1)}%</span>
+                  <span className="category-amount">
+                    {formatCurrency(cat.total)}
+                  </span>
+                  <span className="category-percentage">
+                    {cat.percentage.toFixed(1)}%
+                  </span>
                 </div>
               </div>
             </div>

@@ -13,8 +13,11 @@ export default function ExportButton() {
 
     try {
       const filePath = await invoke("export_to_csv");
-      setMessage({ type: "success", text: t("export.success").replace("{path}", filePath) });
-      
+      setMessage({
+        type: "success",
+        text: t("export.success").replace("{path}", filePath),
+      });
+
       // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
     } catch (error) {
@@ -27,17 +30,15 @@ export default function ExportButton() {
 
   return (
     <div className="export-section">
-      <button 
-        className="export-btn" 
+      <button
+        className="export-btn"
         onClick={handleExport}
         disabled={exporting}
       >
         📥 {exporting ? t("export.exporting") : t("export.exportCSV")}
       </button>
       {message && (
-        <div className={`export-message ${message.type}`}>
-          {message.text}
-        </div>
+        <div className={`export-message ${message.type}`}>{message.text}</div>
       )}
     </div>
   );
