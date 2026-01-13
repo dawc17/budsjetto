@@ -12,6 +12,38 @@
     "thisWeek": "Denne Uken",
     "thisMonth": "Denne Måneden"
   },
+  "tripBudget": {
+    "title": "Reisebudsjett",
+    "addTrip": "+ Ny Reise",
+    "cancel": "Avbryt",
+    "tripName": "Reisenavn",
+    "tripNamePlaceholder": "f.eks. Hamburg-eventyr",
+    "destination": "Reisemål",
+    "destinationPlaceholder": "f.eks. Hamburg, Tyskland",
+    "budget": "Budsjett",
+    "startDate": "Startdato",
+    "endDate": "Sluttdato",
+    "createTrip": "Opprett Reise",
+    "noTrips": "Ingen reiser planlagt ennå. Opprett din første reise for å begynne å spore reisebudsjettet!",
+    "remaining": "Gjenstående:",
+    "overBudget": "Over budsjett med",
+    "addExpense": "Legg til Utgift",
+    "amount": "Beløp",
+    "description": "Beskrivelse",
+    "expenses": "Utgifter",
+    "noExpenses": "Ingen utgifter registrert ennå.",
+    "breakdown": "Forbruksoversikt",
+    "deleteTrip": "Slett Reise",
+    "confirmDelete": "Er du sikker på at du vil slette denne reisen og alle utgiftene?",
+    "categories": {
+      "Transport": "Transport",
+      "Accommodation": "Overnatting",
+      "Food": "Mat",
+      "Activities": "Aktiviteter",
+      "Shopping": "Shopping",
+      "Other": "Annet"
+    }
+  },
   "entryForm": {
     "addEntry": "Legg til post",
     "income": "Inntekt",

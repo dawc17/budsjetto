@@ -19,10 +19,35 @@ pub struct BudgetEntry {
     pub description: String,
 }
 
+// Trip Budget Models
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TripExpense {
+    pub id: String,
+    pub amount: f64,
+    pub category: String,
+    pub description: String,
+    pub date: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Trip {
+    pub id: String,
+    pub name: String,
+    pub destination: String,
+    pub budget: f64,
+    pub currency: String,
+    pub start_date: String,
+    pub end_date: String,
+    pub expenses: Vec<TripExpense>,
+    pub total_spent: f64,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppData {
     pub selected_currency: String,
     pub entries: Vec<BudgetEntry>,
+    #[serde(default)]
+    pub trips: Vec<Trip>,
 }
 
 impl Default for AppData {
@@ -30,6 +55,7 @@ impl Default for AppData {
         Self {
             selected_currency: "NOK".to_string(),
             entries: Vec::new(),
+            trips: Vec::new(),
         }
     }
 }
@@ -304,7 +330,9 @@ fn get_category_analytics(
             entry_data.1 += 1;
         } else {
             total_expenses += amount;
-            let entry_data = expense_map.entry(entry.category.clone()).or_insert((0.0, 0));
+            let entry_data = expense_map
+                .entry(entry.category.clone())
+                .or_insert((0.0, 0));
             entry_data.0 += amount;
             entry_data.1 += 1;
         }
@@ -368,10 +396,9 @@ fn export_to_csv(state: State<AppState>) -> Result<String, String> {
     }
 
     // Save to downloads folder or home directory
-    let mut path = dirs::download_dir().unwrap_or_else(|| {
-        dirs::home_dir().unwrap_or_else(|| PathBuf::from("."))
-    });
-    
+    let mut path = dirs::download_dir()
+        .unwrap_or_else(|| dirs::home_dir().unwrap_or_else(|| PathBuf::from(".")));
+
     let timestamp = chrono::Local::now().format("%Y%m%d_%H%M%S");
     path.push(format!("budsjetto_export_{}.csv", timestamp));
 
@@ -437,6 +464,169 @@ fn get_monthly_trends(months: u32, state: State<AppState>) -> Result<Vec<Monthly
     Ok(trends)
 }
 
+// Trip Budget Commands
+#[tauri::command]
+fn create_trip(
+    name: String,
+    destination: String,
+    budget: f64,
+    start_date: String,
+    end_date: String,
+    state: State<AppState>,
+) -> Result<Trip, String> {
+    if budget <= 0.0 {
+        return Err("Budget must be positive".to_string());
+    }
+
+    let mut data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let trip = Trip {
+        id: Uuid::new_v4().to_string(),
+        name,
+        destination,
+        budget,
+        currency: data.selected_currency.clone(),
+        start_date,
+        end_date,
+        expenses: Vec::new(),
+        total_spent: 0.0,
+    };
+
+    data.trips.push(trip.clone());
+
+    // Save after modification
+    let path = get_data_file_path();
+    let content = serde_json::to_string_pretty(&*data).map_err(|e| e.to_string())?;
+    fs::write(&path, content).map_err(|e| e.to_string())?;
+
+    Ok(trip)
+}
+
+#[tauri::command]
+fn get_trips(state: State<AppState>) -> Result<Vec<Trip>, String> {
+    let data = state.0.lock().map_err(|e| e.to_string())?;
+
+    // Convert trips to current currency if needed
+    let trips: Vec<Trip> = data
+        .trips
+        .iter()
+        .map(|t| {
+            let mut trip = t.clone();
+            if trip.currency != data.selected_currency {
+                trip.budget =
+                    convert_currency(trip.budget, &trip.currency, &data.selected_currency);
+                trip.total_spent =
+                    convert_currency(trip.total_spent, &trip.currency, &data.selected_currency);
+                trip.expenses = trip
+                    .expenses
+                    .iter()
+                    .map(|e| {
+                        let mut exp = e.clone();
+                        exp.amount =
+                            convert_currency(exp.amount, &trip.currency, &data.selected_currency);
+                        exp
+                    })
+                    .collect();
+                trip.currency = data.selected_currency.clone();
+            }
+            trip
+        })
+        .collect();
+
+    Ok(trips)
+}
+
+#[tauri::command]
+fn add_trip_expense(
+    trip_id: String,
+    amount: f64,
+    category: String,
+    description: String,
+    date: String,
+    state: State<AppState>,
+) -> Result<TripExpense, String> {
+    if amount <= 0.0 {
+        return Err("Amount must be positive".to_string());
+    }
+
+    let mut data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let trip = data
+        .trips
+        .iter_mut()
+        .find(|t| t.id == trip_id)
+        .ok_or("Trip not found")?;
+
+    let expense = TripExpense {
+        id: Uuid::new_v4().to_string(),
+        amount,
+        category,
+        description,
+        date,
+    };
+
+    trip.expenses.push(expense.clone());
+    trip.total_spent += amount;
+
+    // Save after modification
+    let path = get_data_file_path();
+    let content = serde_json::to_string_pretty(&*data).map_err(|e| e.to_string())?;
+    fs::write(&path, content).map_err(|e| e.to_string())?;
+
+    Ok(expense)
+}
+
+#[tauri::command]
+fn delete_trip(trip_id: String, state: State<AppState>) -> Result<(), String> {
+    let mut data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let original_len = data.trips.len();
+    data.trips.retain(|t| t.id != trip_id);
+
+    if data.trips.len() == original_len {
+        return Err("Trip not found".to_string());
+    }
+
+    // Save after modification
+    let path = get_data_file_path();
+    let content = serde_json::to_string_pretty(&*data).map_err(|e| e.to_string())?;
+    fs::write(&path, content).map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+#[tauri::command]
+fn delete_trip_expense(
+    trip_id: String,
+    expense_id: String,
+    state: State<AppState>,
+) -> Result<(), String> {
+    let mut data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let trip = data
+        .trips
+        .iter_mut()
+        .find(|t| t.id == trip_id)
+        .ok_or("Trip not found")?;
+
+    let expense = trip
+        .expenses
+        .iter()
+        .find(|e| e.id == expense_id)
+        .ok_or("Expense not found")?;
+
+    let expense_amount = expense.amount;
+    trip.expenses.retain(|e| e.id != expense_id);
+    trip.total_spent -= expense_amount;
+
+    // Save after modification
+    let path = get_data_file_path();
+    let content = serde_json::to_string_pretty(&*data).map_err(|e| e.to_string())?;
+    fs::write(&path, content).map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -455,6 +645,11 @@ pub fn run() {
             get_category_analytics,
             export_to_csv,
             get_monthly_trends,
+            create_trip,
+            get_trips,
+            add_trip_expense,
+            delete_trip,
+            delete_trip_expense,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

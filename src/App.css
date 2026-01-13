@@ -778,3 +778,406 @@ textarea,
 .export-wrapper .export-btn {
   width: 100%;
 }
+
+/* Trip Budget Styles */
+.trip-budget {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.trip-budget.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.trip-budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.trip-budget-header h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.add-trip-btn {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-trip-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* Trip Form */
+.trip-form {
+  background: var(--bg-primary);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row-inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.no-trips {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* Trip List */
+.trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trip-card {
+  background: var(--bg-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.trip-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.trip-card-header:hover {
+  background: var(--bg-secondary);
+}
+
+.trip-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.trip-destination {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.trip-dates {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.trip-budget-info {
+  text-align: right;
+}
+
+.budget-amounts {
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.budget-amounts .spent {
+  color: var(--text-primary);
+}
+
+.budget-amounts .separator {
+  color: var(--text-secondary);
+  margin: 0 4px;
+}
+
+.budget-amounts .total {
+  color: var(--text-secondary);
+}
+
+.remaining {
+  font-size: 0.8125rem;
+  color: var(--positive);
+  margin-top: 4px;
+}
+
+.remaining.over {
+  color: var(--negative);
+  font-weight: 500;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  margin: 0 16px 16px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+/* Trip Details (Expanded) */
+.trip-details {
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+/* Add Expense Form */
+.add-expense-form {
+  margin-bottom: 16px;
+}
+
+.add-expense-form h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.expense-form-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.expense-form-row input,
+.expense-form-row select {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: var(--bg-primary);
+}
+
+.expense-form-row input[type="number"] {
+  width: 100px;
+}
+
+.expense-form-row input[type="text"] {
+  flex: 1;
+  min-width: 150px;
+}
+
+.expense-form-row input[type="date"] {
+  width: 140px;
+}
+
+.expense-form-row select {
+  width: 130px;
+}
+
+.add-expense-btn {
+  padding: 8px 14px;
+  background: var(--positive);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-expense-btn:hover {
+  background: #16a34a;
+}
+
+/* Expense List */
+.expense-list {
+  margin-bottom: 16px;
+}
+
+.expense-list h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.no-expenses {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--bg-primary);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  border-left: 3px solid var(--negative);
+}
+
+.expense-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.expense-category {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.expense-description {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.expense-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.expense-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-weight: 500;
+  color: var(--negative);
+}
+
+.delete-expense-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.delete-expense-btn:hover {
+  color: var(--negative);
+}
+
+/* Category Breakdown */
+.trip-category-breakdown {
+  margin-bottom: 16px;
+}
+
+.trip-category-breakdown h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.category-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-bar-item {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px;
+  gap: 10px;
+  align-items: center;
+}
+
+.category-name {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.category-bar-wrapper {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.category-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.category-amount {
+  font-size: 0.8125rem;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* Delete Trip Button */
+.delete-trip-btn {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: 1px solid var(--negative);
+  color: var(--negative);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-trip-btn:hover {
+  background: var(--negative);
+  color: white;
+}
+
+/* Responsive Trip Budget */
+@media (max-width: 768px) {
+  .trip-card-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .trip-budget-info {
+    text-align: left;
+  }
+
+  .expense-form-row {
+    flex-direction: column;
+  }
+
+  .expense-form-row input,
+  .expense-form-row select {
+    width: 100% !important;
+  }
+
+  .category-bar-item {
+    grid-template-columns: 80px 1fr 70px;
+  }
+}

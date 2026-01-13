@@ -10,6 +10,7 @@ import Charts from "./components/Charts";
 import CategoryAnalytics from "./components/CategoryAnalytics";
 import ExportButton from "./components/ExportButton";
 import ThemeToggle from "./components/ThemeToggle";
+import TripBudget from "./components/TripBudget";
 import "./App.css";
 
 function AppContent() {
@@ -153,10 +154,15 @@ function AppContent() {
 
       <Dashboard currency={currency} onRefresh={refreshTrigger} />
 
+      <TripBudget currency={currency} refreshTrigger={refreshTrigger} />
+
       <Charts currency={currency} refreshTrigger={refreshTrigger} />
 
       <div className="analytics-section">
-        <CategoryAnalytics currency={currency} refreshTrigger={refreshTrigger} />
+        <CategoryAnalytics
+          currency={currency}
+          refreshTrigger={refreshTrigger}
+        />
         <div className="entry-form-wrapper">
           <EntryForm currency={currency} onEntryAdded={handleEntryAdded} />
           <div className="export-wrapper">
