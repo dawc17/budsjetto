@@ -51,5 +51,26 @@
   "languageSelector": {
     "en": "English",
     "no": "Norsk"
+  },
+  "charts": {
+    "monthlyOverview": "Monthly Overview",
+    "noData": "No data available for chart"
+  },
+  "analytics": {
+    "categoryBreakdown": "Category Breakdown",
+    "noData": "No entries for this month",
+    "total": "Total",
+    "entry": "entry",
+    "entries": "entries"
+  },
+  "export": {
+    "exportCSV": "Export to CSV",
+    "exporting": "Exporting...",
+    "success": "Exported to {path}",
+    "error": "Export failed. Please try again."
+  },
+  "theme": {
+    "darkMode": "Switch to dark mode",
+    "lightMode": "Switch to light mode"
   }
 }

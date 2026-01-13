@@ -51,5 +51,26 @@
   "languageSelector": {
     "en": "English",
     "no": "Norsk"
+  },
+  "charts": {
+    "monthlyOverview": "Månedlig oversikt",
+    "noData": "Ingen data tilgjengelig for diagram"
+  },
+  "analytics": {
+    "categoryBreakdown": "Kategorifordeling",
+    "noData": "Ingen poster for denne måneden",
+    "total": "Totalt",
+    "entry": "post",
+    "entries": "poster"
+  },
+  "export": {
+    "exportCSV": "Eksporter til CSV",
+    "exporting": "Eksporterer...",
+    "success": "Eksportert til {path}",
+    "error": "Eksport mislyktes. Prøv igjen."
+  },
+  "theme": {
+    "darkMode": "Bytt til mørk modus",
+    "lightMode": "Bytt til lys modus"
   }
 }

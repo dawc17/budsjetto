@@ -19,10 +19,37 @@
   background-color: var(--bg-primary);
 }
 
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --positive: #4ade80;
+  --negative: #f87171;
+  --accent: #60a5fa;
+  --accent-hover: #3b82f6;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html,
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+[contenteditable="true"],
+.allow-select {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .container {
@@ -414,4 +441,340 @@
 
 .entries::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.125rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+/* Charts */
+.charts {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.charts.loading,
+.charts.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.charts h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.chart-container {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 16px;
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.trend-summary {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.trend-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+}
+
+.trend-month {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.trend-net {
+  font-weight: 600;
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+.trend-net.positive {
+  color: var(--positive);
+}
+
+.trend-net.negative {
+  color: var(--negative);
+}
+
+/* Category Analytics */
+.category-analytics {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.category-analytics.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.analytics-header h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.toggle-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+  color: var(--text-secondary);
+}
+
+.toggle-btn:hover {
+  border-color: var(--accent);
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-emoji {
+  font-size: 1rem;
+}
+
+.category-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.category-count {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.category-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.category-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+}
+
+.category-amount {
+  font-family: "SF Mono", Monaco, "Courier New", monospace;
+  font-weight: 500;
+}
+
+.category-percentage {
+  color: var(--text-secondary);
+}
+
+.analytics-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border-color);
+  font-weight: 600;
+}
+
+.no-data {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
+}
+
+/* Export Button */
+.export-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.export-btn {
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.export-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.export-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.export-message {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+}
+
+.export-message.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.export-message.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+[data-theme="dark"] .export-message.success {
+  background: #166534;
+  color: #dcfce7;
+}
+
+[data-theme="dark"] .export-message.error {
+  background: #991b1b;
+  color: #fee2e2;
+}
+
+/* Analytics Section Layout */
+.analytics-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .analytics-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Footer Actions */
+.footer-actions {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 24px;
+}
+
+/* Entry Form Wrapper in Analytics Section */
+.entry-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.entry-form-wrapper .entry-form-container {
+  flex: 1;
+}
+
+.export-wrapper {
+  padding: 0;
+}
+
+.export-wrapper .export-section {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.export-wrapper .export-btn {
+  width: 100%;
 }

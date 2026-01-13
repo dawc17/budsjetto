@@ -59,8 +59,8 @@ fn convert_currency(amount: f64, from: &str, to: &str) -> f64 {
         return amount;
     }
     match (from, to) {
-        ("NOK", "EUR") => amount / 10.0,
-        ("EUR", "NOK") => amount * 10.0,
+        ("NOK", "EUR") => amount / 11.7,
+        ("EUR", "NOK") => amount * 11.7,
         _ => amount,
     }
 }
@@ -252,6 +252,191 @@ fn get_currency(state: State<AppState>) -> Result<String, String> {
     Ok(data.selected_currency.clone())
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CategorySummary {
+    pub category: String,
+    pub total: f64,
+    pub percentage: f64,
+    pub count: u32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CategoryAnalytics {
+    pub income_by_category: Vec<CategorySummary>,
+    pub expense_by_category: Vec<CategorySummary>,
+    pub total_income: f64,
+    pub total_expenses: f64,
+    pub currency: String,
+}
+
+#[tauri::command]
+fn get_category_analytics(
+    month: Option<u32>,
+    year: Option<i32>,
+    state: State<AppState>,
+) -> Result<CategoryAnalytics, String> {
+    let data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let mut income_map: std::collections::HashMap<String, (f64, u32)> =
+        std::collections::HashMap::new();
+    let mut expense_map: std::collections::HashMap<String, (f64, u32)> =
+        std::collections::HashMap::new();
+
+    let mut total_income = 0.0;
+    let mut total_expenses = 0.0;
+
+    for entry in &data.entries {
+        // Filter by month/year if provided
+        if let (Some(m), Some(y)) = (month, year) {
+            if let Ok(date) = NaiveDate::parse_from_str(&entry.date, "%Y-%m-%d") {
+                if date.month() != m || date.year() != y {
+                    continue;
+                }
+            }
+        }
+
+        let amount = convert_currency(entry.amount, &entry.currency, &data.selected_currency);
+
+        if entry.entry_type == "income" {
+            total_income += amount;
+            let entry_data = income_map.entry(entry.category.clone()).or_insert((0.0, 0));
+            entry_data.0 += amount;
+            entry_data.1 += 1;
+        } else {
+            total_expenses += amount;
+            let entry_data = expense_map.entry(entry.category.clone()).or_insert((0.0, 0));
+            entry_data.0 += amount;
+            entry_data.1 += 1;
+        }
+    }
+
+    let income_by_category: Vec<CategorySummary> = income_map
+        .into_iter()
+        .map(|(category, (total, count))| CategorySummary {
+            category,
+            total,
+            percentage: if total_income > 0.0 {
+                (total / total_income) * 100.0
+            } else {
+                0.0
+            },
+            count,
+        })
+        .collect();
+
+    let expense_by_category: Vec<CategorySummary> = expense_map
+        .into_iter()
+        .map(|(category, (total, count))| CategorySummary {
+            category,
+            total,
+            percentage: if total_expenses > 0.0 {
+                (total / total_expenses) * 100.0
+            } else {
+                0.0
+            },
+            count,
+        })
+        .collect();
+
+    Ok(CategoryAnalytics {
+        income_by_category,
+        expense_by_category,
+        total_income,
+        total_expenses,
+        currency: data.selected_currency.clone(),
+    })
+}
+
+#[tauri::command]
+fn export_to_csv(state: State<AppState>) -> Result<String, String> {
+    let data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let mut csv_content = String::from("ID,Type,Amount,Currency,Category,Date,Description\n");
+
+    for entry in &data.entries {
+        let escaped_description = entry.description.replace('"', "\"\"");
+        csv_content.push_str(&format!(
+            "{},{},{},{},{},{},\"{}\"\n",
+            entry.id,
+            entry.entry_type,
+            entry.amount,
+            entry.currency,
+            entry.category,
+            entry.date,
+            escaped_description
+        ));
+    }
+
+    // Save to downloads folder or home directory
+    let mut path = dirs::download_dir().unwrap_or_else(|| {
+        dirs::home_dir().unwrap_or_else(|| PathBuf::from("."))
+    });
+    
+    let timestamp = chrono::Local::now().format("%Y%m%d_%H%M%S");
+    path.push(format!("budsjetto_export_{}.csv", timestamp));
+
+    fs::write(&path, &csv_content).map_err(|e| e.to_string())?;
+
+    Ok(path.to_string_lossy().to_string())
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MonthlyTrend {
+    pub month: u32,
+    pub year: i32,
+    pub month_name: String,
+    pub income: f64,
+    pub expenses: f64,
+    pub net: f64,
+}
+
+#[tauri::command]
+fn get_monthly_trends(months: u32, state: State<AppState>) -> Result<Vec<MonthlyTrend>, String> {
+    let data = state.0.lock().map_err(|e| e.to_string())?;
+
+    let now = chrono::Local::now().naive_local().date();
+    let mut trends: Vec<MonthlyTrend> = Vec::new();
+
+    for i in 0..months {
+        let target_date = now - chrono::Duration::days((i * 30) as i64);
+        let month = target_date.month();
+        let year = target_date.year();
+
+        let mut income = 0.0;
+        let mut expenses = 0.0;
+
+        for entry in &data.entries {
+            if let Ok(date) = NaiveDate::parse_from_str(&entry.date, "%Y-%m-%d") {
+                if date.month() == month && date.year() == year {
+                    let amount =
+                        convert_currency(entry.amount, &entry.currency, &data.selected_currency);
+                    if entry.entry_type == "income" {
+                        income += amount;
+                    } else {
+                        expenses += amount;
+                    }
+                }
+            }
+        }
+
+        let month_names = [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+        ];
+
+        trends.push(MonthlyTrend {
+            month,
+            year,
+            month_name: month_names[(month - 1) as usize].to_string(),
+            income,
+            expenses,
+            net: income - expenses,
+        });
+    }
+
+    trends.reverse(); // Oldest to newest
+    Ok(trends)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -267,6 +452,9 @@ pub fn run() {
             get_monthly_summary,
             set_currency,
             get_currency,
+            get_category_analytics,
+            export_to_csv,
+            get_monthly_trends,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
